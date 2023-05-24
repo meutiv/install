@@ -1,2 +1,2 @@
 # install
-Oxwall software installation script
+Meutiv software installation script
