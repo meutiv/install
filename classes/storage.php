@@ -22,7 +22,7 @@ class INSTALL_Storage
     
     protected function __construct()
     {
-        $this->storage = OW::getSession()->get('OW-INSTALL-DATA');
+        $this->storage = MT::getSession()->get('MT-INSTALL-DATA');
         
         $this->storage = empty($this->storage) ? array() : $this->storage;
     }
@@ -31,11 +31,11 @@ class INSTALL_Storage
     {
         if ( empty($this->storage) )
         {
-            OW::getSession()->delete('OW-INSTALL-DATA');
+            MT::getSession()->delete('MT-INSTALL-DATA');
         }
         else
         {
-            OW::getSession()->set('OW-INSTALL-DATA', $this->storage);
+            MT::getSession()->set('MT-INSTALL-DATA', $this->storage);
         }
         
     }

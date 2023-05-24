@@ -1,6 +1,6 @@
 <?php
 
-class INSTALL_Renderable extends OW_Renderable
+class INSTALL_Renderable extends MT_Renderable
 {
     /**
      * Returns rendered markup

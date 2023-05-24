@@ -25,11 +25,11 @@ class INSTALL_Application
 
     public function init( $dbReady )
     {
-        OW_Auth::getInstance()->setAuthenticator(new OW_SessionAuthenticator());
+        MT_Auth::getInstance()->setAuthenticator(new MT_SessionAuthenticator());
         
-        $router = OW::getRouter();
-        $router->setBaseUrl(OW_URL_HOME);
-        $uri = OW::getRequest()->getRequestUri();
+        $router = MT::getRouter();
+        $router->setBaseUrl(MT_URL_HOME);
+        $uri = MT::getRequest()->getRequestUri();
         $router->setUri($uri);
         
         $router->setDefaultRoute(new INSTALL_DefaultRoute());
@@ -39,7 +39,7 @@ class INSTALL_Application
 
     public function display( $dbReady )
     {
-        $dispatchAttrs = OW::getRouter()->route();
+        $dispatchAttrs = MT::getRouter()->route();
         $controllerClass = $dispatchAttrs['controller'];
 
         /* @var $controller INSTALL_ActionController */
@@ -57,7 +57,7 @@ class INSTALL_Application
         $template = $controller->getTemplate();
         if ( empty($template) )
         {
-            $controllerName = OW::getAutoloader()->classToFilename($controllerClass, false);
+            $controllerName = MT::getAutoloader()->classToFilename($controllerClass, false);
             $template = INSTALL_DIR_VIEW_CTRL . $controllerName
                 . '_'
                 . UTIL_String::capsToDelimiter($dispatchAttrs['action'], '_') . '.php';
@@ -82,7 +82,7 @@ class INSTALL_Application
 
 }
 
-class INSTALL_DefaultRoute extends OW_DefaultRoute
+class INSTALL_DefaultRoute extends MT_DefaultRoute
 {
     public function getDispatchAttrs( $uri )
     {

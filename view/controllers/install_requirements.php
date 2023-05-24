@@ -4,7 +4,7 @@
 	Your hosting account doesn't meet the following requirements:
 </p>
 
-<ul class="ow_regular">
+<ul class="mt_regular">
 <!-- PHP version -->
 <?php if ( !empty($_assign_vars['fails']['php']['version']) ) { $requiredVersion = $_assign_vars['fails']['php']['version']; ?>
     
@@ -61,5 +61,5 @@
 </ul>
 
 <p>
-	Please correct these before you can proceed with Oxwall installation. Complete server requirements list and compatible hosting can be found at <a href="http://www.oxwall.org/hosting">Oxwall.org/hosting</a>
+	Please correct these before you can proceed with Meutiv installation. Complete server requirements list and compatible hosting can be found at <a href="https://meutiv.com/hosting">Meutiv.com/hosting</a>
 </p>

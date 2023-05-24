@@ -22,7 +22,7 @@ class INSTALL_FeedBack
     
     protected function __construct()
     {
-        $this->session = OW::getSession()->get('OW-INSTALL-FEEDBACK');
+        $this->session = MT::getSession()->get('MT-INSTALL-FEEDBACK');
         $this->session = empty($this->session) ? array(
             'message' => array(),
             'flag' => array()
@@ -31,7 +31,7 @@ class INSTALL_FeedBack
     
     public function __destruct()
     {
-        OW::getSession()->set('OW-INSTALL-FEEDBACK', $this->session);
+        MT::getSession()->set('MT-INSTALL-FEEDBACK', $this->session);
     }
     
     public function errorMessage( $msg )

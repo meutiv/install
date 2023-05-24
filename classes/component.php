@@ -8,7 +8,7 @@ class INSTALL_Component extends INSTALL_Renderable
 
         if( $template === null )
         {
-            $template = OW::getAutoloader()->classToFilename(get_class($this), false);
+            $template = MT::getAutoloader()->classToFilename(get_class($this), false);
         }
 
         $this->setTemplate(INSTALL_DIR_VIEW_CMP . $template . '.php');

@@ -4,6 +4,6 @@ class INSTALL_CTRL_Error extends INSTALL_ActionController
 {
     public function notFound()
     {
-        $this->redirect(OW::getRouter()->urlForRoute('requirements'));
+        $this->redirect(MT::getRouter()->urlForRoute('requirements'));
     }
 }

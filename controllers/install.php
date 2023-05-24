@@ -6,13 +6,13 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
     {
         if ( $dbReady && $dispatchAttrs["action"] != "finish" )
         {
-            $this->redirect(OW::getRouter()->urlForRoute("finish"));
+            $this->redirect(MT::getRouter()->urlForRoute("finish"));
         }
     }
 
     public function requirements()
     {
-        $this->setPageHeading("Welcome to Oxwall Installation!");
+        $this->setPageHeading("Welcome to Meutiv Installation!");
         
         $lines = file(INSTALL_DIR_FILES . 'requirements.txt');
         $ruleLines = array();
@@ -137,19 +137,19 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
         if ( empty($checkRequirements) )
         {
-            $this->redirect( OW::getRouter()->urlForRoute('site') );
+            $this->redirect( MT::getRouter()->urlForRoute('site') );
         }
     }
 
     public function site()
     {
-        $this->setPageHeading("Welcome to Oxwall Installation!");
+        $this->setPageHeading("Welcome to Meutiv Installation!");
         $this->setPageTitle('Site');
         INSTALL::getStepIndicator()->activate('site');
 
         $fieldData = array();
-        $fieldData['site_url'] = OW_URL_HOME;
-        $fieldData['site_path'] = OW_DIR_ROOT;
+        $fieldData['site_url'] = MT_URL_HOME;
+        $fieldData['site_path'] = MT_DIR_ROOT;
 
         $sessionData = INSTALL::getStorage()->getAll();
         $fieldData = array_merge($fieldData, $sessionData);
@@ -158,7 +158,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
         $errors = array();
 
-        if (OW::getRequest()->isPost())
+        if (MT::getRequest()->isPost())
         {
             $data = $_POST;
             $data = array_filter($data, 'trim');
@@ -199,7 +199,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
             if (empty($errors))
             {
-                $this->redirect( OW::getRouter()->urlForRoute('db') );
+                $this->redirect( MT::getRouter()->urlForRoute('db') );
             }
 
             foreach ( $errors as $flag )
@@ -217,7 +217,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
         INSTALL::getStepIndicator()->activate('db');
 
         $fieldData = array();
-        $fieldData['db_prefix'] = 'ow_';
+        $fieldData['db_prefix'] = 'mt_';
 
         $sessionData = INSTALL::getStorage()->getAll();
         $fieldData = array_merge($fieldData, $sessionData);
@@ -226,7 +226,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
         $errors = array();
 
-        if (OW::getRequest()->isPost())
+        if (MT::getRequest()->isPost())
         {
             $data = $_POST;
             $data = array_filter($data, 'trim');
@@ -261,7 +261,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
                 try
                 {
-                    $dbo = OW_Database::getInstance(array(
+                    $dbo = MT_Database::getInstance(array(
                         'host' => $hostInfo[0],
                         'port' => empty($hostInfo[1]) ? null : $hostInfo[1],
                         'username' => $data['db_user'],
@@ -273,7 +273,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
                     if ( !empty($existingTables) )
                     {
-                        INSTALL::getFeedback()->errorMessage('This database should be empty _especially_ if you try to reinstall Oxwall.');
+                        INSTALL::getFeedback()->errorMessage('This database should be empty _especially_ if you try to reinstall Meutiv.');
 
                         $this->redirect();
                     }
@@ -288,7 +288,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
             if (empty($errors))
             {
-                $this->redirect( OW::getRouter()->urlForRoute('install') );
+                $this->redirect( MT::getRouter()->urlForRoute('install') );
             }
 
             foreach ( $errors as $flag )
@@ -304,14 +304,14 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
     {
         $success = true;
 
-        $configFile = OW_DIR_INC . 'config.php';
+        $configFile = MT_DIR_INC . 'config.php';
 
         $dirs = array(
-            OW_DIR_PLUGINFILES,
-            OW_DIR_USERFILES,
-            OW_DIR_STATIC,
-            OW_DIR_SMARTY . 'template_c' . DS,
-            OW_DIR_LOG
+            MT_DIR_PLUGINFILES,
+            MT_DIR_USERFILES,
+            MT_DIR_STATIC,
+            MT_DIR_SMARTY . 'template_c' . DS,
+            MT_DIR_LOG
         );
 
         $errorDirs = array();
@@ -319,13 +319,13 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
 
         $doInstall = isset($params["action"]);
         
-        if ( OW::getRequest()->isPost() || $doInstall )
+        if ( MT::getRequest()->isPost() || $doInstall )
         {
             if ( !empty($_POST['isConfigWritable']) )
             {
                 @file_put_contents($configFile, $_POST['configContent']);
                 
-                $this->redirect(OW::getRouter()->urlForRoute("install-action", array(
+                $this->redirect(MT::getRouter()->urlForRoute("install-action", array(
                     "action" => "install"
                 )));
             }
@@ -333,18 +333,18 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
             if ( !empty($errorDirs) )
             {
                 //INSTALL::getFeedback()->errorMessage('Some directories are not writable');
-                $this->redirect(OW::getRouter()->urlForRoute("install"));
+                $this->redirect(MT::getRouter()->urlForRoute("install"));
             }
 
             try
             {
-                OW::getDbo();
+                MT::getDbo();
             }
             catch ( InvalidArgumentException $e )
             {
-                INSTALL::getFeedback()->errorMessage('<b>ow_includes/config.php</b> file is incorrect. Update it with details provided below.');
+                INSTALL::getFeedback()->errorMessage('<b>mt_includes/config.php</b> file is incorrect. Update it with details provided below.');
 
-                $this->redirect(OW::getRouter()->urlForRoute("install"));
+                $this->redirect(MT::getRouter()->urlForRoute("install"));
             }
 
             try
@@ -355,16 +355,16 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
             {
                 INSTALL::getFeedback()->errorMessage($e->getMessage());
 
-                $this->redirect(OW::getRouter()->urlForRoute("install"));
+                $this->redirect(MT::getRouter()->urlForRoute("install"));
             }
 
             try
             {
-                OW::getConfig()->saveConfig('base', 'site_installed', 0);
+                MT::getConfig()->saveConfig('base', 'site_installed', 0);
             }
             catch ( Exception $e )
             {
-                OW::getConfig()->addConfig('base', 'site_installed', 0);
+                MT::getConfig()->addConfig('base', 'site_installed', 0);
             }
 
             if ( isset($_POST['continue']) || $doInstall )
@@ -372,7 +372,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
                 // allow to admin select additional plugins
                 if ( $this->getPluginsForInstall(true) )
                 {
-                    $this->redirect(OW::getRouter()->urlForRoute('plugins'));
+                    $this->redirect(MT::getRouter()->urlForRoute('plugins'));
                 }
                 else
                 {
@@ -455,7 +455,7 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
         // get all plugin list
         $avaliablePlugins = $this->getPluginsForInstall();
 
-        if ( OW::getRequest()->isPost() )
+        if ( MT::getRequest()->isPost() )
         {
             $plugins = empty($_POST['plugins']) ? array() : $_POST['plugins'];
 
@@ -502,25 +502,25 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
         BOL_QuestionService::getInstance()->saveQuestionsData(array( 'realname' => $realName ), $user->id);
 
         BOL_AuthorizationService::getInstance()->addAdministrator($user->id);
-        OW::getUser()->login($user->id);
+        MT::getUser()->login($user->id);
 
-        OW::getConfig()->saveConfig('base', 'site_name', $storage->get('site_title'));
-        OW::getConfig()->saveConfig('base', 'site_tagline', $storage->get('site_tagline'));
-        OW::getConfig()->saveConfig('base', 'site_email', $email);
+        MT::getConfig()->saveConfig('base', 'site_name', $storage->get('site_title'));
+        MT::getConfig()->saveConfig('base', 'site_tagline', $storage->get('site_tagline'));
+        MT::getConfig()->saveConfig('base', 'site_email', $email);
 
         $notInstalledPlugins = array();
 
         if ( !empty($installPlugins) )
         {
-            OW::getPluginManager()->initPlugins(); // Init installed plugins ( base, admin ), to insure that all of their package pointers are added
+            MT::getPluginManager()->initPlugins(); // Init installed plugins ( base, admin ), to insure that all of their package pointers are added
             
             foreach ( $installPlugins as $plugin )
             {
                 try
                 {
                     BOL_PluginService::getInstance()->install($plugin['key'], false);
-                    OW::getPluginManager()->readPluginsList();
-                    OW::getPluginManager()->initPlugin(OW::getPluginManager()->getPlugin($plugin['key']));
+                    MT::getPluginManager()->readPluginsList();
+                    MT::getPluginManager()->initPlugin(MT::getPluginManager()->getPlugin($plugin['key']));
                 }
                 catch ( LogicException $e )
                 {
@@ -534,12 +534,12 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
             }
         }
 
-        OW::getConfig()->saveConfig('base', 'site_installed', 1);
-        OW::getConfig()->saveConfig('base', 'dev_mode', 1);
+        MT::getConfig()->saveConfig('base', 'site_installed', 1);
+        MT::getConfig()->saveConfig('base', 'dev_mode', 1);
 
-        @UTIL_File::removeDir(OW_DIR_ROOT . "ow_install");
+        @UTIL_File::removeDir(MT_DIR_ROOT . "mt_install");
 
-        $this->redirect(OW_URL_HOME);
+        $this->redirect(MT_URL_HOME);
     }
 
     /**
@@ -590,24 +590,24 @@ class INSTALL_CTRL_Install extends INSTALL_ActionController
             $lineNo++;
 
             if ( !strlen(($line = trim($line)))
-                || $line{0} == '#' || $line{0} == '-'
+                || $line[0] == '#' || $line[0] == '-'
                 || preg_match('~^/\*\!.+\*/;$~siu', $line) ) {
                 continue;
             }
 
             $query .= $line;
 
-            if ( $line{strlen($line)-1} != ';' ) {
+            if ( $line[strlen($line)-1] != ';' ) {
                 continue;
             }
 
-            $query = str_replace('%%TBL-PREFIX%%', OW_DB_PREFIX, $query);
+            $query = str_replace('%%TBL-PREFIX%%', MT_DB_PREFIX, $query);
 
             try {
-                OW::getDbo()->query($query);
+                MT::getDbo()->query($query);
             }
             catch ( Exception $e ) {
-                throw new LogicException('<b>ow_includes/config.php</b> file is incorrect. Update it with details provided below.');
+                throw new LogicException('<b>mt_includes/config.php</b> file is incorrect. Update it with details provided below.');
             }
 
             $query = '';

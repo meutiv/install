@@ -3,12 +3,12 @@
 $installComplete = false;
 $dbReady = false;
 
-if ( defined('OW_URL_HOME') )
+if ( defined('MT_URL_HOME') )
 {
     try
     {
-        $installedValue = (bool) OW::getConfig()->getValue('base', 'site_installed');
-        $installComplete = (bool) OW::getConfig()->getValue('base', 'install_complete');
+        $installedValue = (bool) MT::getConfig()->getValue('base', 'site_installed');
+        $installComplete = (bool) MT::getConfig()->getValue('base', 'install_complete');
     }
     catch ( Exception $e )
     {
@@ -19,9 +19,9 @@ if ( defined('OW_URL_HOME') )
     $dbReady = $installedValue;
 }
 
-if ( !$installComplete || ( defined('OW_INSTALL_DEV') && OW_INSTALL_DEV ) )
+if ( !$installComplete || ( defined('MT_INSTALL_DEV') && MT_INSTALL_DEV ) )
 {
-    if ( !defined('OW_URL_HOME') )
+    if ( !defined('MT_URL_HOME') )
     {
         $selfUrl = UTIL_Url::selfUrl();
 
@@ -34,7 +34,7 @@ if ( !$installComplete || ( defined('OW_INSTALL_DEV') && OW_INSTALL_DEV ) )
 
         if ( !$installPos )
         {
-            $installPos = strpos($selfUrl, '/ow_install');
+            $installPos = strpos($selfUrl, '/mt_install');
         }
 
         if ( $installPos )
@@ -42,11 +42,11 @@ if ( !$installComplete || ( defined('OW_INSTALL_DEV') && OW_INSTALL_DEV ) )
             $selfUrl = substr($selfUrl, 0, $installPos) . '/';
         }
 
-        define('OW_URL_HOME', $selfUrl);
+        define('MT_URL_HOME', $selfUrl);
     }
 
     define('INSTALL_DIR_ROOT', dirname(__FILE__) . DS);
-    define('INSTALL_URL_ROOT', OW_URL_HOME . 'ow_install/');
+    define('INSTALL_URL_ROOT', MT_URL_HOME . 'mt_install/');
 
     define('INSTALL_URL_VIEW', INSTALL_URL_ROOT . 'view/');
 
@@ -59,14 +59,14 @@ if ( !$installComplete || ( defined('OW_INSTALL_DEV') && OW_INSTALL_DEV ) )
     define('INSTALL_DIR_VIEW_CMP', INSTALL_DIR_VIEW . 'components' . DS);
     define('INSTALL_DIR_FILES', INSTALL_DIR_ROOT . 'files' . DS);
 
-    OW::getAutoloader()->addPackagePointer('INSTALL', INSTALL_DIR_CLASSES);
-    OW::getAutoloader()->addPackagePointer('INSTALL_BOL', INSTALL_DIR_BOL);
-    OW::getAutoloader()->addPackagePointer('INSTALL_CTRL', INSTALL_DIR_CTRL);
-    OW::getAutoloader()->addPackagePointer('INSTALL_CMP', INSTALL_DIR_CMP);
+    MT::getAutoloader()->addPackagePointer('INSTALL', INSTALL_DIR_CLASSES);
+    MT::getAutoloader()->addPackagePointer('INSTALL_BOL', INSTALL_DIR_BOL);
+    MT::getAutoloader()->addPackagePointer('INSTALL_CTRL', INSTALL_DIR_CTRL);
+    MT::getAutoloader()->addPackagePointer('INSTALL_CMP', INSTALL_DIR_CMP);
 
-    OW::getAutoloader()->addClass('INSTALL', INSTALL_DIR_CLASSES . 'install.php');
+    MT::getAutoloader()->addClass('INSTALL', INSTALL_DIR_CLASSES . 'install.php');
 
-    OW::getSession()->start();
+    MT::getSession()->start();
 
     $application = INSTALL_Application::getInstance();
 

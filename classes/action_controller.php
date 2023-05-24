@@ -2,7 +2,7 @@
 
 class INSTALL_ActionController extends INSTALL_Renderable
 {
-    private $title = 'OW Install';
+    private $title = 'Meutiv Install';
     private $heading = 'Installation Process';
     
     private $navigation;
@@ -42,13 +42,13 @@ class INSTALL_ActionController extends INSTALL_Renderable
         // if empty redirect location -> current URI is used
         if ( $redirectTo === null )
         {
-            $redirectTo = OW::getRequest()->getRequestUri();
+            $redirectTo = MT::getRequest()->getRequestUri();
         }
 
         // if URI is provided need to add site home URL
         if ( !strstr($redirectTo, 'http://') && !strstr($redirectTo, 'https://') )
         {
-            $redirectTo = OW::getRouter()->getBaseUrl() . UTIL_String::removeFirstAndLastSlashes($redirectTo);
+            $redirectTo = MT::getRouter()->getBaseUrl() . UTIL_String::removeFirstAndLastSlashes($redirectTo);
         }
 
         UTIL_Url::redirect($redirectTo);
